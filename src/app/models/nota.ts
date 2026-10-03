@@ -5,4 +5,5 @@ export interface Nota
     contenido: string;
     fechaCreacion: Date;
     fechaModificacion?: Date;
+    titulo1?: string;
 }
