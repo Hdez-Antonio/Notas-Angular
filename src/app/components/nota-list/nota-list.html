@@ -1,0 +1,164 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>📝 Mis notas</h1>
+        <button class="btn btn-primary" (click)="mostrarNuevaNota()">
+            + Nueva nota
+        </button>
+  </div>
+
+  <div class="row">
+      @for (nota of notas; track nota.id) 
+      {
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ nota.titulo }}
+              </h5>
+              <p class="card-text">
+                {{ nota.contenido }}
+              </p>
+              <button class="btn btn-outline-primary btn-sm me-2"
+                (click)="verNota(nota)">
+                Ver
+              </button>
+              <button class="btn btn-outline-warning btn-sm me-2"
+                  (click)="editarNota(nota)">
+                Editar
+              </button>
+              <button class="btn btn-outline-danger btn-sm"
+                (click)="eliminarNota(nota.id)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+      @if (notaSeleccionada) 
+      {
+        <div class="card mt-4">
+          <div class="card-header">
+            Detalle de la nota
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">
+              {{ notaSeleccionada.titulo }}
+            </h3>
+            <p class="card-text">
+              {{ notaSeleccionada.contenido }}
+            </p>
+            <button
+              class="btn btn-secondary"
+              (click)="notaSeleccionada = null">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      }
+      @if (editando && notaSeleccionada) 
+      {
+        <div class="card mt-4">
+          <div class="card-header">
+            Editar nota
+          </div>
+          <div class="card-body">
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Título
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="notaSeleccionada.titulo">
+
+            </div>
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Contenido
+              </label>
+
+              <textarea
+                class="form-control"
+                rows="5"
+                [(ngModel)]="notaSeleccionada.contenido">
+              </textarea>
+
+            </div>
+
+            <button
+              class="btn btn-success me-2"
+              (click)="guardarNota()">
+              Guardar cambios
+            </button>
+
+            <button
+              class="btn btn-secondary"
+              (click)="editando = false">
+              Cancelar
+            </button>
+
+          </div>
+
+        </div>
+      }
+      @if (!editando) 
+      {
+        <div class="card mt-4">
+          <div class="card-header">
+            Nueva nota
+          </div>
+          <div class="card-body">
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Título
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="nuevaNota.titulo"
+                placeholder="Escribe el título">
+
+            </div>
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Contenido
+              </label>
+
+              <textarea
+                class="form-control"
+                rows="5"
+                [(ngModel)]="nuevaNota.contenido"
+                placeholder="Escribe el contenido">
+              </textarea>
+
+            </div>
+
+            <button
+              class="btn btn-primary"
+              (click)="crearNota()">
+              Guardar nota
+            </button>
+            <button
+              class="btn btn-secondary ms-2"
+              (click)="cancelarNuevaNota()">
+              Cancelar
+            </button>
+
+          </div>
+        </div>
+        <br/>
+      }
+  </div>
+</div>
+
