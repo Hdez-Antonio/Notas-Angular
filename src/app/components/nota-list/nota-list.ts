@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import  { Nota } from '../../models/nota';
+import { NotaService } from '../../services/nota';
 
 @Component({
   selector: 'app-nota-list',
@@ -8,28 +9,10 @@ import  { Nota } from '../../models/nota';
   templateUrl: './nota-list.html',
   styleUrl: './nota-list.css',
 })
-export class NotaList {
+export class NotaList implements OnInit
+{
 
-  notas: Nota[] = [
-    {
-      id: 1,
-      titulo: 'Aprendiendo Angular',
-      contenido: 'Estudiar componentes y servicios de Angular',    
-      fechaCreacion: new Date()
-    },
-    {
-      id: 2,
-      titulo: 'Aprender Node.js',
-      contenido: 'Crear una API REST utilizando Express.',
-      fechaCreacion: new Date()
-    },
-    {
-      id: 3,
-      titulo: 'SQL Server',
-      contenido: 'Crear la base de datos para nuestra aplicación.',
-      fechaCreacion: new Date()
-    }
-  ];
+  notas: Nota[] = [];
   notaSeleccionada: Nota | null = null;
   editando = false;
   nuevaNota = {
@@ -38,15 +21,23 @@ export class NotaList {
   };
   mostrarFormulario = false;
 
-  
+  constructor(private notaService: NotaService) {}
+
+  ngOnInit(): void
+  {
+    this.notas = this.notaService.obtenerNotas();
+  }
+
   eliminarNota(id: number): void
   {
-    this.notas = this.notas.filter(nota => nota.id !== id);
+    this.notaService.eliminarNota(id);
+    this.notas = this.notaService.obtenerNotas();
   }
 
   verNota(nota: Nota): void 
   {
     this.notaSeleccionada = nota;
+     this.editando = false;
   }
 
   editarNota(nota: Nota): void
@@ -57,20 +48,15 @@ export class NotaList {
 
   guardarNota(): void
   {
-    if (!this.notaSeleccionada) 
-    {
+    if (!this.notaSeleccionada) {
       return;
     }
-    const indice = this.notas.findIndex(nota => nota.id === this.notaSeleccionada!.id);
-    if (indice !== -1) 
-    {
-      this.notas[indice] = 
-      {
-        ...this.notaSeleccionada,
-        fechaModificacion: new Date()
-      };
-
-    }
+    const notaActualizada: Nota = {
+      ...this.notaSeleccionada,
+      fechaModificacion: new Date()
+    };
+    this.notaService.actualizarNota(notaActualizada);
+    this.notas = this.notaService.obtenerNotas();
     this.editando = false;
     this.notaSeleccionada = null;
   }
@@ -84,7 +70,9 @@ export class NotaList {
       fechaCreacion: new Date()
     };
 
-    this.notas.push(nuevaNota);
+    this.notaService.crearNota(nuevaNota);
+    this.notas = this.notaService.obtenerNotas();
+
     this.nuevaNota = {
       titulo: '',
       contenido: ''

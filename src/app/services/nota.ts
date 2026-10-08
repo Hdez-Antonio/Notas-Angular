@@ -6,29 +6,26 @@ import { Nota } from '../models/nota';
 
 export class NotaService
 {
-  private notas: Nota[] = [
 
+  private notas: Nota[] = [
     {
       id: 1,
       titulo: 'Aprender Angular',
       contenido: 'Estudiar componentes y servicios de Angular.',
       fechaCreacion: new Date()
     },
-
     {
       id: 2,
       titulo: 'Aprender Node.js',
       contenido: 'Crear una API REST utilizando Express.',
       fechaCreacion: new Date()
     },
-
     {
       id: 3,
       titulo: 'SQL Server',
       contenido: 'Crear la base de datos para nuestra aplicación.',
       fechaCreacion: new Date()
     }
-
   ];
 
   obtenerNotas(): Nota[] {
